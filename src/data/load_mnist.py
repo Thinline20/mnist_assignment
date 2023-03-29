@@ -85,7 +85,7 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
         dataset["train_label"] = _change_one_hot_label(dataset["train_label"])
         dataset["test_label"] = _change_one_hot_label(dataset["test_label"])
 
-    if flatten:
+    if not flatten:
         for key in ("train_img", "test_img"):
             dataset[key] = dataset[key].reshape(-1, 1, 28, 28)
 
