@@ -72,3 +72,20 @@ class SoftmaxWithLoss:
         dX = (self.Y - self.T) / batch_size
         
         return dX
+
+class Mish:
+    """Mish
+    Mish is a variation of Swish function
+    Mish is de
+    """
+    def __init__(self):
+        self.out = None
+        
+    def forward(self, X):
+        out = X * np.tanh(np.log(1 + np.exp(X)))
+        self.out = out
+
+        return out
+    
+    def backward(self, dout=1):
+        pass
