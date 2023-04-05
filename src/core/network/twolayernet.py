@@ -1,7 +1,9 @@
+from collections import OrderedDict
 import numpy as np
 
 from core.functions import *
 from core.gradient import *
+from core.layers import *
 
 
 class TwoLayerNet:
@@ -74,3 +76,32 @@ class TwoLayerNet:
         grads["B1"] = np.sum(dz1, axis=0)
 
         return grads
+
+class BackPropagationNet:
+    def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01) -> None:
+        self.params = {}
+        
+        self.params["W1"] = weight_init_std / np.random.randn(input_size, hidden_size)
+        self.params["B1"] = np.zeros(hidden_size)
+        self.params["W2"] = weight_init_std / np.random.randn(hidden_size, output_size)
+        self.params["B2"] = np.zeros(output_size)
+
+        self.layers = OrderedDict()
+        self.layers["Affine1"] = Affine(self.params["W1"], self.params["B1"])
+        self.layers["ReLU1"] = ReLU()
+        self.layers["Affine2"] = Affine(self.params["W2"], self.params["B2"])
+        self.last_layer = SoftmaxWithLoss()
+        
+    def predict(self, X):
+        for layer in self.layers.values():
+            X = layer.forward(X)
+        
+        return X
+    
+    def loss(self, X, T):
+        Y = self.predict(X)
+        return self.last_layer.forward(Y, T)
+
+    def accuracy(self, X, T):
+        Y = self.predict(X)
+        Y = np.argmax(Y, axis=1)
