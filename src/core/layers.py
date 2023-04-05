@@ -62,7 +62,7 @@ class SoftmaxWithLoss:
         
     def forward(self, X, T):
         self.T = T
-        self.y = softmax(X)
+        self.Y = softmax(X)
         self.loss = cee(self.Y, T)
 
         return self.loss
