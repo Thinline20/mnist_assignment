@@ -100,3 +100,12 @@ def cee(y, t, delta=1e-7):
              
     batch_size = y.shape[0]
     return -np.sum(np.log(y[np.arange(batch_size), t] + delta)) / batch_size
+
+def tanh(x):
+    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+
+def softplus(x):
+    return np.log(1 + np.exp(x))
+
+def mish(x):
+    return x * tanh(softplus(x))

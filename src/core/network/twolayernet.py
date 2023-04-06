@@ -80,7 +80,7 @@ class TwoLayerNet:
 
 class BackPropagationNet:
     def __init__(
-        self, input_size, hidden_size, output_size, weight_init_std=0.01
+        self, input_size, hidden_size, output_size, weight_init_std=0.01, activation_layer=ReLU
     ) -> None:
         self.params = {}
 
@@ -91,7 +91,7 @@ class BackPropagationNet:
 
         self.layers = OrderedDict()
         self.layers["Affine1"] = Affine(self.params["W1"], self.params["B1"])
-        self.layers["ReLU1"] = ReLU()
+        self.layers["ReLU1"] = activation_layer()
         self.layers["Affine2"] = Affine(self.params["W2"], self.params["B2"])
         self.last_layer = SoftmaxWithLoss()
 
