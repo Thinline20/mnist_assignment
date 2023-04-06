@@ -109,3 +109,6 @@ def softplus(x):
 
 def mish(x):
     return x * tanh(softplus(x))
+
+def gelu_approx(x):
+    return 0.5 * x * (1 + np.tanh(np.sqrt(2 / np.pi) * (x + 0.044715 * (x ** 3))))
