@@ -77,6 +77,21 @@ def softmax(x):
     x = x - np.max(x)
     return np.exp(x) / np.sum(np.exp(x))
 
+def tanh(x):
+    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+
+def softplus(x):
+    return np.log(1 + np.exp(x))
+
+def swish(x):
+    return x * sigmoid(x)
+
+def mish(x):
+    return x * tanh(softplus(x))
+
+def gelu_approx(x):
+    return 0.5 * x * (1 + np.tanh(np.sqrt(2 / np.pi) * (x + 0.044715 * (x ** 3))))
+
 # Loss Functions
 
 def cee(y, t, delta=1e-7):
@@ -100,15 +115,3 @@ def cee(y, t, delta=1e-7):
              
     batch_size = y.shape[0]
     return -np.sum(np.log(y[np.arange(batch_size), t] + delta)) / batch_size
-
-def tanh(x):
-    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
-
-def softplus(x):
-    return np.log(1 + np.exp(x))
-
-def mish(x):
-    return x * tanh(softplus(x))
-
-def gelu_approx(x):
-    return 0.5 * x * (1 + np.tanh(np.sqrt(2 / np.pi) * (x + 0.044715 * (x ** 3))))

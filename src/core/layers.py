@@ -1,6 +1,6 @@
 import numpy as np
 
-from core.functions import softmax, cee
+from core.functions import *
 
 
 class ReLU:
@@ -78,6 +78,22 @@ class SoftmaxWithLoss:
         return dX
 
 
+class Swish:
+    def __init__(self) -> None:
+        self.out = None
+
+    def forward(self, X):
+        out = swish(X)
+        self.X = X
+
+        return out
+
+    def backward(self, dout):
+        dX = dout * (sigmoid(self.X) + swish(self.X) * (1 - sigmoid(self.X)))
+
+        return dX
+
+
 class Mish:
     """Mish
     Mish is a variation of Swish function
@@ -101,11 +117,12 @@ class Mish:
         dX = dout * (np.exp(X) * omega / pow(delta, 2))
 
         return dX
-    
+
+
 class LeakyReLU:
     def __init__(self) -> None:
         self.mask = None
-        
+
     def forward(self, X):
         self.mask = X <= 0
         out = X.copy()
@@ -116,40 +133,35 @@ class LeakyReLU:
     def backward(self, dout):
         dout[self.mask] = 0.01
         dX = dout
-        
+
         return dX
+
 
 class ELU:
     def __init__(self) -> None:
         self.mask = None
-        
+
     def forward(self, X):
         self.mask = X <= 0
         out = X.copy()
-        
 
 
-# class GELU:
-#     """GELU
-#     GELU is a variation of ReLU function
-#     Stable Diffusion, BERT, GPT-3 uses GELU for its activation function
-#     """
+class GELU:
+    """GELU
+    GELU is a variation of ReLU function
+    Stable Diffusion, BERT, GPT-3 uses GELU for its activation function
+    """
 
-#     def __init__(self) -> None:
-#         self.X = None
+    def __init__(self) -> None:
+        self.X = None
 
-#     def forward(self, X):
-#         a = pow(X, 3)
-#         b = X + 0.044715 * a
-#         c = 1 + np.tanh(np.sqrt(2/np.pi) * b)
-#         d = 0.5 * X * c
-#         self.X = d
-#         return d
-        
-#         out = 0.5 * X * (1 + np.tanh(np.sqrt(2 / np.pi)) * (X + 0.044715 * (X ** 3)))
-#         self.X = X
+    def forward(self, X):
+        a = pow(X, 3)
+        b = X + 0.044715 * a
+        c = 1 + np.tanh(np.sqrt(2 / np.pi) * b)
+        out = 0.5 * X * c
+        self.X = X
+        return out
 
-#         return out
-
-#     def backward(self, dout):
-#         return dout * (0.0592789 * (self.X ** 3) + 0.662852 * self.X + 0.5)
+    def backward(self, dout):
+        return dout * (0.0592789 * (self.X**3) + 0.662852 * self.X + 0.5)
