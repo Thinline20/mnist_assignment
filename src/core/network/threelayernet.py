@@ -7,15 +7,15 @@ from core.layers import *
 
 class BackPropagationNet:
     def __init__(
-        self, input_size, hidden_size, output_size, weight_init_std=0.01, activation_layer=ReLU
+        self, input_size, hidden_size1, hidden_size2, output_size, weight_init_std=0.01, activation_layer=ReLU
     ) -> None:
         self.params = {}
 
-        self.params["W1"] = weight_init_std / np.random.randn(input_size, hidden_size)
-        self.params["B1"] = np.zeros(hidden_size)
-        self.params["W2"] = weight_init_std / np.random.randn(hidden_size, output_size)
-        self.params["B2"] = np.zeros(output_size)
-        self.params["W3"] = weight_init_std / np.random.randn(hidden_size, output_size)
+        self.params["W1"] = weight_init_std / np.random.randn(input_size, hidden_size1)
+        self.params["B1"] = np.zeros(hidden_size1)
+        self.params["W2"] = weight_init_std / np.random.randn(hidden_size1, hidden_size2)
+        self.params["B2"] = np.zeros(hidden_size2)
+        self.params["W3"] = weight_init_std / np.random.randn(hidden_size2, output_size)
         self.params["B3"] = np.zeros(output_size)
 
         self.layers = OrderedDict()
@@ -48,7 +48,7 @@ class BackPropagationNet:
         return accuracy
 
     def numerical_gradient(self, X, T):
-        loss_W = lambda W: self.loss(X, T)
+        loss_W = lambda _: self.loss(X, T)
 
         grads = {}
         grads["W1"] = numerical_gradient(loss_W, self.params["W1"])
