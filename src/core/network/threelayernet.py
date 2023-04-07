@@ -5,7 +5,7 @@ from core.functions import *
 from core.gradient import *
 from core.layers import *
 
-class BackPropagationNet:
+class ThreeLayerNet:
     def __init__(
         self, input_size, hidden_size1, hidden_size2, output_size, weight_init_std=0.01, activation_layer=ReLU
     ) -> None:
