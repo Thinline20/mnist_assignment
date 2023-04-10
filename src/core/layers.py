@@ -110,13 +110,19 @@ class Mish:
 
     def backward(self, dout):
         X = self.X
-        omega = (
-            np.exp(3 * X) + 4 * np.exp(2 * X) + (6 + 4 * X) * np.exp(X) + 4 * (1 + X)
-        )
+        omega = self.get_omega()
         delta = 1 + pow((np.exp(X) + 1), 2)
         dX = dout * (np.exp(X) * omega / pow(delta, 2))
 
         return dX
+
+    def get_omega(self):
+        a = np.exp(3 * self.X)
+        b = 4 * np.exp(2 * self.X)
+        c = (6 + 4 * self.X) * np.exp(self.X)
+        d = 4 * (1 + self.X)
+
+        return a + b + c + d
 
 
 class LeakyReLU:
