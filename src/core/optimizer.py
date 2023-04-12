@@ -21,7 +21,7 @@ class Momentum:
                 self.v[k] = np.zeros_like(v)
                 
         for k in params.keys():
-            self.v[k] = self.momentum * self.v[k] + self.lr * grads[k]
+            self.v[k] = self.momentum * self.v[k] - self.lr * grads[k]
             params[k] += self.v[k]
 
 class AdaGrad:
