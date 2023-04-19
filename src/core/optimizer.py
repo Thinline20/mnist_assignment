@@ -71,7 +71,7 @@ class AdamWScheduler(Enum):
     Cosine = 2
 
 class AdamW:
-    def __init__(self, batch_size, train_data_count, epoch, lr=0.01, decay_rate_norm=0.5, beta1=0.9, beta2=0.999, scheduler=AdamWScheduler.Cosine_With_Restart) -> None:
+    def __init__(self, train_data_count, epoch, batch_size, lr=0.01, decay_rate_norm=0.5, beta1=0.9, beta2=0.999, scheduler=AdamWScheduler.Cosine_With_Restart) -> None:
         self.lr = lr
         self.decay_rate = decay_rate_norm * np.sqrt(batch_size / train_data_count * epoch)
         self.beta1 = beta1
@@ -90,5 +90,13 @@ class AdamW:
                 self.v[k] = np.zeros_like(v)
 
         self.iter += 1
+        lr_t = self.lr * np.sqrt(1.0 - self.beta2 ** self.iter) / (1.0 - self.beta1 ** self.iter)
         
+        for k in params.keys():
+            d = self.decay_rate * params[k]
+            g = grads[k] + d
+            self.m[k] += (1.0 - self.beta1) * (g - self.m[k])
+            self.v[k] += (1.0 - self.beta2) * (g ** 2 - self.v[k])
+            
+            params[k] -= ((lr_t * self.m[k]) / (np.sqrt(self.v[k]) + epsilon) + d)
         
