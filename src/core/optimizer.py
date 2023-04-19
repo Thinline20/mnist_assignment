@@ -99,4 +99,24 @@ class AdamW:
             self.v[k] += (1.0 - self.beta2) * (g ** 2 - self.v[k])
             
             params[k] -= ((lr_t * self.m[k]) / (np.sqrt(self.v[k]) + epsilon) + d)
+
+class Gravity:
+    def __init__(self, tmax, lr=0.1, alpha=0.01, beta=0.9):
+        self.tmax = tmax
+        self.lr = lr
+        self.alpha = alpha
+        self.beta = beta
+        self.v = None
+        
+    def update(self, params, grads):
+        if self.v == None:
+            self.v = {}
+            for k, v in params.items():
+                self.v[k] = np.zeros_like(v)
+                
+        mu = 0
+        sigma = self.alpha / self.lr
+
+        for k in params.keys():
+            continue    
         
